@@ -1,0 +1,158 @@
+<!DOCTYPE>  
+<html>  
+<head>  
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+  <title>WEB打印小票样例</title>  
+  <script language="javascript" src="js/LodopFuncs.js"></script>  
+  </object>  
+</head>  
+<body>  
+<input type="button" value="打印预览" onclick="printPreview()" />  
+<!-- 控制打印按钮,自动打印可以直接执行printOrder-->  
+<input type="button" value="直接打印" onclick="printOrder()" />  
+<script language="javascript" type="text/javascript">   
+    var LODOP; //声明为全局变量  
+    function printPreview(){  
+      //创建小票打印页  
+      CreatePrintPage();  
+      //打印预览  
+      LODOP.PREVIEW();      
+    }  
+    /**  
+    * 样例函数,服务器确认订单后执行  
+    */  
+    function printOrder() {  
+        //创建小票打印页  
+        CreatePrintPage();  
+        //开始打印  
+        LODOP.PRINT();    
+    };            
+    function CreatePrintPage(json) {  
+        //json 创建模拟服务器响应的订单信息对象  
+        var json = {"title":"001", "name":"重庆真味食府", "phone": "138123456789", "orderTime": "2021-05-17 15:30:15",   
+        "orderNo": "20122157481315","tableNum":"A01", "status":"新下单","total":119.02,"totalCount":6, "teaSeat":1,"rice":1,"pack":1,"preferential":0,"discount":0,
+        "goodsList":[  
+                      {"name":"蒙牛奶特香草味牛奶243ml*12盒", "price":50.01, "count":2, "total":100.02},   
+                      {"name":"菜心(无公害食品)", "price":5.00, "count":2, "total":10},   
+                      {"name":"旺菜", "price":4.50, "count":1, "total":4.50},  
+                      {"name":"黄心番薯", "price":4.50, "count":1, "total":4.50}  
+                    ]  
+        }     
+        var hPos=10,//小票上边距  
+        pageWidth=258,//小票宽度  原： 580
+        rowHeight=15,//小票行距  15
+        leftPagging=10,
+        //获取控件对象  
+        // document.getElementById('LODOP_X'),document.getElementById('LODOP_EM')
+        // document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM')
+        LODOP=getLodop();   
+        //SET_PRINT_STYLE:设置纯文本打印项风格,格式：SET_PRINT_STYLE(strStyleName,varStyleValue)。
+        //strStyleName：打印风格名，设定纯文本风格名称及其含义如下：|varStyleValue：打印风格值，相关值如下：
+        //“FontName”： 字体名称。|值： 字符型，与操作系统字体名一致，缺省是“宋体”。
+        //“FontSize”： 字体大小。|值：数值型，单位是pt，缺省值是9，可以含小数，如13.5。
+        //“FontColor”： 字体颜色。|值：整数或字符型，如同CSS的color。
+        //“Bold”： 是否粗体。|值：数字型，1代表粗体，0代表非粗体，缺省值是0。
+        //“Italic”： 是否斜体。|值：数字型，1代表斜体，0代表非斜体，缺省值是0。
+        //“Underline”： 是否下滑线。|值：数字型，1代表有下划线，0代表无下划线，缺省值是0。
+        //“Alignment”： 内容左右靠齐方式。|值：数字型，1--左靠齐 2--居中 3--右靠齐，缺省值是1。
+        //“Angle”： 旋转角度。|值：数字型，逆时针旋转角度数，单位是度，0度表示不旋转
+        //LODOP.SET_PRINT_STYLE("FontColor", "#ff0000"); // 字体颜色
+        //LODOP.SET_PRINT_STYLE("FontColor", "#000000"); // 更换颜色
+        // LODOP.NEWPAGEA();
+        //初始化   
+        LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_名片");  
+        //添加小票标题文本  
+        //LODOP.ADD_PRINT_TEXT(hPos,30,pageWidth,rowHeight,json.title);  54
+        LODOP.ADD_PRINT_TEXT(hPos, leftPagging, pageWidth, pageWidth*3, "********  " + json.title + " ********");
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        //上边距往下移  
+        hPos += rowHeight * 3;  
+        //内容，参数（上边距，左边距，内容显示宽度，内容显示高度）  
+        LODOP.ADD_PRINT_TEXT(hPos, leftPagging*10, pageWidth, pageWidth*2, json.name); 
+        hPos += rowHeight * 2;  
+        LODOP.ADD_PRINT_TEXT(hPos, leftPagging*5, pageWidth, pageWidth*3,"--"+json.status +"【"+ json.tableNum +"】"+"--");
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        hPos += rowHeight * 2;  
+        LODOP.ADD_PRINT_LINE(hPos,2, hPos, pageWidth,2, 1); //线，竖杠(上边距1,1左边距,上边距2,2左边距,intLineStyle, intLineWidth)
+        //intLineStyle:线条类型，默认为0；0--实线 1--破折线 2--点线 3--点划线 4--双点划线
+        //intLineWidth:线条宽，默认是1，整数型，单位是(打印)像素，非实线的线条宽也是0。
+        hPos+=5;
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging*2,pageWidth,rowHeight,"【订单编号】" + json.orderNo);
+        hPos+=rowHeight;
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging*2,pageWidth,rowHeight,"【下单时间】" + json.orderTime);
+        hPos+=rowHeight;  
+        LODOP.ADD_PRINT_LINE(hPos,2, hPos, pageWidth,2, 1);  
+        hPos+=rowHeight; 
+        //遍历json的商品数组  
+        for(var i=0;i<json.goodsList.length;i++){ 
+          //商品列表 180+80=260
+          LODOP.ADD_PRINT_TEXT(hPos, leftPagging, pageWidth/2, rowHeight*2,json.goodsList[i].name);  
+          LODOP.ADD_PRINT_TEXT(hPos, leftPagging + pageWidth/2, 30, rowHeight*2, "*"+json.goodsList[i].count);
+          LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+          LODOP.ADD_PRINT_TEXT(hPos, leftPagging + pageWidth/2 + 50, 80, rowHeight*2, json.goodsList[i].total);
+          LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+          hPos += json.goodsList[i].name.length > 9 ? rowHeight*2+10 : rowHeight+10 ;  
+        }  
+        //其他
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"..................其他..................");
+        hPos+=rowHeight;  
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"茶位费："+json.teaSeat);
+        hPos+=rowHeight;
+        if(json.rice>0){
+          LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"米饭费："+json.rice);
+          hPos+=rowHeight;
+        }
+        if(json.pack>0){
+          LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"打包费："+json.pack);
+          hPos+=rowHeight;
+        }
+        if(json.preferential>0){
+          LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"优惠券："+json.preferential);
+          hPos+=rowHeight;  
+        }if(json.discount>0){
+          LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"折扣："+json.discount);
+          hPos+=rowHeight;  
+        }
+        LODOP.ADD_PRINT_LINE(hPos,2, hPos, pageWidth,2, 1); 
+        hPos+=rowHeight;
+        //总计
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging*2,pageWidth/3,rowHeight*3,"总计："+json.totalCount);
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging*15,pageWidth/2,rowHeight*3,"￥"+json.total);
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        hPos+=rowHeight*3;
+        //地址
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight*3,"谢谢惠顾,欢迎下次光临"); 
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        hPos+=rowHeight*4;
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,getDate());
+        hPos+=rowHeight-5;
+        LODOP.ADD_PRINT_TEXT(hPos,leftPagging,pageWidth,rowHeight,"******# " + json.title + "  完*******");
+        LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+        //合计  
+        //LODOP.ADD_PRINT_TEXT(hPos,80,pageWidth,rowHeight,"合计:"+json.totalCount);  
+        //LODOP.ADD_PRINT_TEXT(hPos,130,pageWidth,rowHeight,"￥"+json.total);  
+        //初始化打印页的规格  
+        LODOP.SET_PRINT_PAGESIZE(3, hPos+30, rowHeight*3, json.orderNo + "订单信息");  
+          
+    };
+    function getDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
+} 
+</script>  
+</body>  
+</html>  

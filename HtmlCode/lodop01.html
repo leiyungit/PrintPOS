@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>后台打印</title>
+      <script src="LodopFuncs.js"></script>
+   </head>
+   <body class="ykwl-page">
+       <form name="myform" method="post" id="myform">
+          <button type="button" class="btn btn-primary" onclick='javascript:location.href=history.go(-1);'>返&nbsp;回</button>
+          <button type="button" class="btn btn-primary" onclick="OpenPreview()">打&nbsp;印</button>
+       </form>
+<script language="javascript" type="text/javascript"> 
+    var LODOP; //声明为全局变量
+    function OpenPreview() {
+            LODOP = getLodop(document.getElementById('LODOP_X'),document.getElementById('LODOP_EM'));
+            //打印时间
+            nowTime = getDate();
+            //订单号
+            //orderNo = $("#orderNo").text();
+            //
+            LODOP.NEWPAGEA();
+            //LODOP.ADD_PRINT_RECT(10,18,324,392,0,1);
+            LODOP.ADD_PRINT_TEXT(30,10,258,54,"****#1 尤友订单****");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            //内容，参数（上边距，左边距，内容显示宽度，内容显示高度）  
+            LODOP.ADD_PRINT_TEXT(80,50,258,54,"中交和美新城(后门)");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",10);
+            
+            LODOP.ADD_PRINT_TEXT(120,40,258,54,"--已在线支付--");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            
+            LODOP.ADD_PRINT_TEXT(150,15,258,54,"................................");
+            LODOP.ADD_PRINT_TEXT(180,15,258,54,"【下单时间】2018-12-01 04:02:00");
+            LODOP.ADD_PRINT_TEXT(210,15,258,54,"..............商品..............");
+            //商品列表
+            LODOP.ADD_PRINT_TEXT(230,15,100,54,"蒙牛奶特香草味牛奶243ml*12盒");
+            LODOP.ADD_PRINT_TEXT(230,130,40,54,"*1");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+            LODOP.ADD_PRINT_TEXT(230,170,40,54,"22");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+            
+            LODOP.ADD_PRINT_TEXT(270,15,100,54,"蒙牛未来星妙妙儿童成长牛奶原味125ml*20盒");
+            LODOP.ADD_PRINT_TEXT(270,130,40,54,"*1");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+            LODOP.ADD_PRINT_TEXT(270,170,40,54,"22");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",14);
+            //其他
+            LODOP.ADD_PRINT_TEXT(320,15,258,54,"..............其他..............");
+            LODOP.ADD_PRINT_TEXT(340,15,258,54,"配送费：0.00元");
+            LODOP.ADD_PRINT_TEXT(360,15,258,54,"优惠券：0.00元");
+            LODOP.ADD_PRINT_TEXT(380,15,258,54,"商品总金额：0.00元");
+            LODOP.ADD_PRINT_TEXT(400,15,258,54,"................................");
+            //总计
+            LODOP.ADD_PRINT_TEXT(420,15,258,54,"总计：");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            LODOP.ADD_PRINT_TEXT(420,100,100,54,"￥136.06");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            //地址
+            LODOP.ADD_PRINT_TEXT(460,15,200,54,"海上五月花5期天马路海上五月花5期7幢1001");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            //收货人
+            // LODOP.ADD_PRINT_TEXT(540,15,200,54,"依恋");
+            // LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            // LODOP.ADD_PRINT_TEXT(570,15,200,54,"18859669092");
+            // LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            LODOP.ADD_PRINT_TEXT(540,10,200,54,nowTime);
+            LODOP.ADD_PRINT_TEXT(550,10,258,54,"*******#1 完******");
+            LODOP.SET_PRINT_STYLEA(0,"fontsize",16);
+            // 后添加
+            
+            //设定打印页面大小
+            LODOP.SET_PRINT_PAGESIZE(3,560,45,"订单页面");
+            
+            LODOP.PREVIEW();  
+            // LODOP.PRINT();      
+    };
+    console.log(needCLodop());
+    if (needCLodop()) {
+        window.On_CLodop_Opened=function(){
+          console.log("1111111111")
+          OpenPreview();                         
+          window.On_CLodop_Opened=null;
+        };                  
+    } else 
+        window.onload = function(){
+          console.log("22222222222")
+          OpenPreview();
+    };
+    
+    
+function getDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
+}
+</script>
+   </body>
+</html>
