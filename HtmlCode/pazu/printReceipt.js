@@ -85,9 +85,9 @@ function print(num) {
     //注意：这种方式下是不能预览的，只能立即打印。否则预览看到的是整个网页，而不是指定的frame
     window.frames['myifrm'].focus();
  
-    pazu.TPrinter.doPreview();//打印预览
+    //pazu.TPrinter.doPreview();//打印预览
  
-    //pazu.TPrinter.doPrint(isPromtUser);
+    pazu.TPrinter.doPrint(isPromtUser);
  
  
 }

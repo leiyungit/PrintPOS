@@ -1,0 +1,14 @@
+#div_PrintData>div>div {height: 18px; font-size: 12px;}
+.fontSize12{font-size: 12px;}
+.fontSize13{font-size: 13px;}
+.fontSize14{font-size: 14px;}
+.fontSize16{font-size: 16px;}
+.fontSize18{font-size: 18px;}
+.fontSize18{font-size: 18px;}
+/* ul,li{ list-style:none; padding:0; display: inline;} */
+/* ul {list-style: none; padding:0; }
+li {  display: inline; } */
+.textcenter{ text-align: center;}
+.rowCss{width: 100%; overflow:hidden; margin-top: 5px;}
+.rowInLeft{float:left; width:80%}
+.rowInRight{float:right; width:18%;}

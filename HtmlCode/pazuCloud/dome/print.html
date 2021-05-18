@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PAZUCloud -- WEB打印控件云版本DEMO</title>
+    <script type="text/javascript">
+        //浏览器不支持WebSocket，强制转到http协议的地址
+        var urlA=window.location.href.split(':');
+        if (urlA[0].toLowerCase() == 'https') {
+            urlA[0] = 'http';
+            window.location.href = urlA.join(":");
+        } 
+        //*******************变量声明********************
+        var SelPrinters="Microsoft Print to PDF"; //打印服务器上的打印机
+        var SelPapers="P58000x120000"; // 该打印机支持的纸张
+        //***************************************
+        var isPreviewOnly = true;
+        function doPagesetup() {
+            // 页边距
+            PAZU.TPrinter.marginTop= 5;
+            PAZU.TPrinter.marginBottom= 5;
+            PAZU.TPrinter.marginLeft= 5; 
+            PAZU.TPrinter.marginRight= 5; 
+            // 页面页脚
+            PAZU.TPrinter.footer= ""; //document.getElementById("footer").value;
+            PAZU.TPrinter.header= ""; //document.getElementById("header").value;
+            PAZU.TPrinter.fontCSS = ""; //document.getElementById("hfcss").value; // 页面页脚的CSS控制样式
+            PAZU.TPrinter.orientation = 1; // document.getElementById("ori_1").checked?1:2;                     //属性纸张方向  数据类型：整数1或者2 ， 1=纵向  2=横向 
+            PAZU.TPrinter.paperName= SelPapers;                   //属性   纸张大小名称  数据类型：字符串 
+            PAZU.TPrinter.printerName = SelPrinters;                  //属性   打印机名称    数据类型：字符串 
+            PAZU.TPrinter.isZoomOutToFit = true;            //属性   是否缩放以适应大小打印 数据类型：Boolean true / false    
+            //打印份数
+            PAZU.TPrinter.copies = 1;                            //数据类型：整数，默认为1 
+            // 页码范围(如:1-5或者1,3,5等，默认为打印全部页)
+            PAZU.TPrinter.range = "";                          // 数据类型：字符串 
+            // 是否整份打印结束后再打印下一份
+            PAZU.TPrinter.isCopyByCopy = false;                   //数据类型：Boolean  true / false 
+            // 是否打印背景    
+            PAZU.TPrinter.isPrintBackground = false;
+        }
+        //2.打印指定DIV内的内容（红色虚框内）
+        function print_2() {
+            doPagesetup();
+            var s = document.getElementById("div_PrintData").innerHTML;
+            PAZU.print(s, null, null, isPreviewOnly);
+        }
+        //4.纯CSS注入，改变打印内容的字体样式(增加删除线)
+        function print_4() {
+            doPagesetup();
+            //“css/pazu_hack.css” 的内容： #div_PrintData span{ text-decoration:line-through}
+            PAZU.print("div_PrintData", null, ["css/pazu_hack.css"], isPreviewOnly);
+        }
+        //6.同时注入JS和CSS
+        function print_6() {
+            doPagesetup();
+            var o = {
+                key: "theKey",
+                content: "this is from JSON object"
+            }
+            PAZU.print(JSON.stringify(o), ["js/json2.js", "js/pazu_hack.js"], ["css/pazu_hack.css"], isPreviewOnly);
+        }
+    </script>
+    <!--pazuclient.js要放到PAZU_Config定义的后面-->
+    <script type="text/javascript" charset="utf-8" src="js/pazuclient.js"></script>
+    <style>
+        .fontSize12{font-size: 12px;}
+        .fontSize13{font-size: 13px;}
+        .fontSize18{font-size: 18px;}
+         /* ul,li{ list-style:none; padding:0; display: inline;} */
+         ul {list-style: none; padding:0; }
+         li {  display: inline; }
+        .textcenter{ text-align: center;}
+        .rowCss{width: 100%; overflow:hidden; }
+        .rowInLeft{float:left; width:80%}
+        .rowInRight{float:right; width:18%;}
+        #div_PrintData>div>div {height: 18px; font-size: 12px;}
+    </style>
+</head>
+ 
+<body>
+<!--这个div_PAZU_Tips 用于给用户检测PAZU是否成功加载的提示，你可以按文档用自己的方式检测PAZU加载-->  
+
+<div id="div_PrintData2" style="border:2px dashed red;padding:10px;width:300px; display: none;">
+    <div style="background:url(images/printer.jpg) no-repeat;background-position-x:320px;height:auto">
+         <!-- <span style="font-size:40px;font-weight:bold">PAZU云版本</span><p></p>
+         <span  style="font-size:20px;font-weight:bold">迄今为止最好的web打印中间件</span> -->
+         <table width="100%" class="fontSize12">
+            <thead>
+                <tr>
+                    <td colspan="2" align="center" >
+                        <span class="fontSize18">001</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        桌号：A01
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        类型：堂食/外带
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        <hr style="width: 100%; border: 1px dashed black;" size="1" />
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 250px">
+                        菜单
+                    </th>
+                    <th style="width: 50px">
+                        数量
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA</div>
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>香蕉</div>
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr style="width: 100%; border: 1px dashed black;" size="1" />
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        合计
+                    </td>
+                    <td >
+                        2
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr style="width: 100%; border: 1px dashed black;" size="1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        订单号：201412020001
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        下单时间：2021-12-02 11:28:10
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        打印时间：2021-12-02 11:28:10
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr style="width: 100%; border: 1px dashed black;" size="1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="fontSize18">
+                        {订单备注XXXX订单备注XXXX订单备注XXXX订单备注XXXX订单备注XXXX订单备注XXXX订单备注XXXX}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    <!-- <div class="p__" style="border:1px solid yellow;margin-top:10px;background-color:yellow">黄色这个div只显示不打印(class="p__")</div>-->
+    </div> 
+</div>
+<div  id="div_PrintData" style="border:2px dashed red;padding:10px;width:300px;">
+    <div style="background:url(images/printer.jpg) no-repeat;background-position-x:320px;height:auto">
+        <!-- <span style="font-size:40px;font-weight:bold">PAZU云版本</span><p></p>
+        <span  style="font-size:20px;font-weight:bold">迄今为止最好的web打印中间件</span> -->
+            <div class="textcenter fontSize18" style="text-align: center; font-size: 18px;">001</div>
+            <div >桌号：A01</div>
+            <div >类型：堂食/外带</div>
+            <hr style="width: 100%; border: 1px dashed black;" size="1" />
+            <!-- <div class="rowCss fontSize13">
+                <span class="rowInLeft"><b>菜单</b></span>
+                <span class="rowInRight"><b>数量</b></span>
+            </div>
+            <div class="rowCss fontSize13">
+                <span class="rowInLeft">玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA</span>
+                <span class="rowInRight">1</span>
+            </div>
+            <div class="rowCss fontSize13">
+                <span class="rowInLeft">香蕉</span>
+                <span class="rowInRight">2</span>
+            </div>
+            <hr style="width: 100%; border: 1px dashed black;" size="1" />
+            <div class="rowCss">
+                <span class="rowInLeft">合计</span>
+                <span class="rowInRight">3</span>
+            </div> -->
+            <table width="100%" class="fontSize12">
+                <thead>
+                    <tr>
+                        <th style="width: 250px" class="fontSize16">菜单</th>
+                        <th style="width: 50px" class="fontSize16">数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div>玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA玫瑰SPA</div></td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><div>香蕉</div></td>
+                        <td>1</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="2"><hr style="width: 100%; border: 1px dashed black;" size="1" /></td></tr>
+                    <tr><td>合计</td><td >2</td></tr>
+                </tfoot>
+            </table>
+            <hr style="width: 100%; border: 1px dashed black;" size="1" />
+            <div > 订单号：201412020001</div>
+            <div >下单时间：2021-12-02 11:28:10</div>
+            <div >打印时间：2021-12-02 11:28:10</div>
+            <hr style="width: 100%; border: 1px dashed black;" size="1" />
+            <div class="fontSize18">
+                {订单备注XXXX}
+            </div>
+            <!--
+         -->
+   </div> 
+</div>
+   <br/> <br/> <br/> 
+    <button onclick="print_2();" style="width:400px;">2.打印指定DIV内的内容（红色虚框内）</button>
+    <p></p>
+    <button onclick="print_4();" style="width:400px;">4.纯CSS注入，改变打印内容的字体样式(字体加粗)</button>
+    <p></p>
+    <button onclick="print_6();" style="width:400px;">6.同时注入JS和CSS,对JSON内容进行处理打印</button>
+    </br>
+    http://www.4fang.net/tech/pazucloud_demo.html <br/>
+    https://www.4fang.net/c/bbs_48314.html
+</body>
+</html>
+
+
+
